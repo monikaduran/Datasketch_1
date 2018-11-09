@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<head>
+  <title>Abortos en Colombia</title>
+  <meta charset="utf-8">
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@4.2.0/build/vega.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc6/build/vega-lite.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.19.2/build/vega-embed.js"></script>
+
+  <style media="screen">
+   .bloque{ padding-left:100px;}
+    /* Add space between Vega-Embed links  */
+   .vega-actions a {
+      margin-right: 115px;
+    }
+
+    .General{
+    text-align: justify;
+            font-style:georgia; 
+            line-height: 20pt;
+            font-size: 17pt;
+            color: #222;
+        }
+  </style>
+</head>
+<body style="background-color:white;"topmargin="100" leftmargin="150" marginheight="50" marginwidth="50">
+
+	<h1 style="color:#0101DF";>Número de abortos Legales en Colombia entre 2009 y 2017 </h1>
+  <!-- Container for the visualization -->
+  
+    
+  <div id="vis"align="center"></div>
+
+  <STYLE type="text/css">
+  h1 { text-align: center}
+ </STYLE>
+
+ 	
+  <script>
+   
+  var vlSpec = 
+  {
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.0.0-rc6.json",
+  "data": {  "url": "data/abc.csv","format": {"type": "csv","parse": {"date": "date"}
+    }
+  },
+  "width": 600,
+  "height": 600,
+  "layer": [
+    {
+      "encoding": {
+        "x": {"field": "FECHA", "type": "nominal","axis":{"title":"TOTAL AÑO","offset":5},},
+        "y": {"field": "NUMERO DE ABORTOS", "type": "quantitative","axis":{"title":"NUMERO DE ABORTOS","offset":5 }},
+        "color": {"field": "RANGO DE EDAD", "type": "nominal","scale":{"scheme":"category10"},"axis":{"title":"RANGO DE EDAD","offset":5}}
+      },
+      "layer": [{
+        "mark": "trail"
+      },{
+        "selection": {
+          "tooltip": {
+            "type": "single",
+            "nearest": true,
+            "on": "mouseover",
+            "encodings": [
+              "x"
+            ],
+            "empty": "none"
+          }
+        },
+        "mark": "point",
+        "encoding": {
+          "opacity": {
+            "condition": {
+              "selection": "tooltip",
+              "value": 1
+            },
+            "value": 0
+          }
+        }
+      }]
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "selection": "tooltip"
+          }
+        }
+      ],
+      "layer": [{
+        "mark": {
+         "type": "rule",
+         "color": "gray"
+        },
+        "encoding": {
+          "x": {
+
+            "type": "nominal",
+            "field": "FECHA"
+          }
+        }
+      }, {
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "dx": 10,
+          "dy": -10
+        },
+        "encoding": {
+          "text": {
+            "type": "quantitative",
+            "field": "NUMERO DE ABORTOS"
+
+          },
+          "color": { "type": "nominal","field": "RANGO DE EDAD"},
+          "x": {
+           
+            "type": "nominal",
+            "field": "FECHA",       
+          },
+          "y": {
+            "type": "quantitative",
+            "field": "NUMERO DE ABORTOS"
+          }
+        }
+      }]
+   }
+ ]
+}
+  // Embed the visualization in the container with id `vis`
+vegaEmbed("#vis", vlSpec,{theme: 'light', actions:false});
+
+  </script>
+</body>
+</html>
+
+
+
+
+
